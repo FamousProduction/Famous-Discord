@@ -1,2 +1,2 @@
-# Famous-Discord
-Invite: https://discord.gg/3t5v5c3
+# Famous Role Assigner
+Invite: https://discord.gg/6fcKNzk
