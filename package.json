@@ -1,0 +1,15 @@
+{
+  "name": "FamousRole",
+  "version": "0.0.1",
+  "description": "I'm famous, why you don't?",
+  "main": "role.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "HaZZe",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "moment": "^2.24.0"
+  }
+}
