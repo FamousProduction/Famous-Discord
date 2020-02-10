@@ -27,24 +27,6 @@ bot.on("message", async message => {
     message.delete(); 
     message.channel.send(sayMessage);
   }
-  
-  if(command === "delete" || command === "purge" ) {
-    if(message.author.id !== owner_id) return;
-    const deleteCount = parseInt(args[0], 10);
-    
-    if(!deleteCount || deleteCount < 2 || deleteCount > 100)
-      return message.reply("Please provide a number between 2 and 100 for the number of messages to delete");
-    
-    const fetched = await message.channel.fetchMessages({limit: deleteCount});
-    message.channel.bulkDelete(fetched)
-      .catch(error => message.reply(`Couldn't delete messages because of: ${error}`));
-
-    const purgeEmbed = new RichEmbed()
-      .setColor("#f94343")
-      .setDescription("Deleted " + deleteCount + " messages in this channel.");
-
-    message.channel.send(purgeEmbed);
-  }
 
   if(command === "verify") {
     if(message.author.id !== owner_id) return;
@@ -56,19 +38,6 @@ bot.on("message", async message => {
     msg = await message.channel.send(roleEmbed);
     msg.react("✅");
   }
-  if(command === "giveaway") {
-    if(message.author.id !== owner_id) return;
-    message.delete();
-    console.log(args[0] + " " + args[1] + " " + args[2]);
-
-    let giveawayChannel = message.mentions.channels.first()
-    
-    if(!giveawayChannel) return message.channel.send("No giveaway channel selected.");
-    argsresult = args.slice(1).join(" ");
-    mChannel.send(argsresult);
-    
-  }
-
 });
 
 bot.on("messageReactionAdd", (reaction, user) => {
