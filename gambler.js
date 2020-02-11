@@ -9,7 +9,8 @@ const fs = require("fs");
 bot.commands = new Discord.Collection();
 const mongoose = require("mongoose");
 mongoose.connect('mongodb://hazze:famousbot@famousdb-shard-00-00-gpgqa.mongodb.net:27017,famousdb-shard-00-01-gpgqa.mongodb.net:27017,famousdb-shard-00-02-gpgqa.mongodb.net:27017/test?ssl=true&replicaSet=FamousDB-shard-0&authSource=admin&retryWrites=true&w=majority/Coins', {
-  useNewUrlParser: true
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
 });
 const Coins = require("./models/coins.js");
 
