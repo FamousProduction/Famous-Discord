@@ -52,7 +52,7 @@ bot.on("message", async message => {
   } else {
     if (message.channel.type === 'dm') return;
     let chance = Math.floor(Math.random() * 100) + 1;
-    if (chance > 50) {
+    if (chance > 0) {
       //here is where the coins are added.
 
       let coinstoadd = Math.ceil(Math.random() * 10) + 5;
