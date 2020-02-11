@@ -43,7 +43,7 @@ bot.on("message", async message => {
   let content = message.content.split(" ");
   let command = content[0];
   let args = content.slice(1);
-  let prefix = config.prefix;
+  let prefix = "!";
 
   if (command.startsWith(prefix)) {
 
