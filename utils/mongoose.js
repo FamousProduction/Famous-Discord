@@ -12,7 +12,7 @@ module.exports = {
             family: 4
         };
         
-        mongoose.connect('mongodb://localhost:27017/lincoln', dbOptions);
+        mongoose.connect('mongodb://hazze:famousbot@famousdb-shard-00-00-gpgqa.mongodb.net:27017,famousdb-shard-00-01-gpgqa.mongodb.net:27017,famousdb-shard-00-02-gpgqa.mongodb.net:27017/test?ssl=true&replicaSet=FamousDB-shard-0&authSource=admin&retryWrites=true&w=majority/famous', dbOptions);
         mongoose.set('useFindAndModify', false);
         mongoose.Promise = global.Promise;
         
