@@ -34,4 +34,4 @@ fs.readdir('./commands/', async (err, files) => {
   });
 
 client.mongoose.init();
-client.login();
+client.login(process.env.BOT_TOKEN)
