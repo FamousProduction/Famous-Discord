@@ -2,7 +2,7 @@
   "name": "lincoln",
   "version": "1.0.0",
   "description": "Follow along with my Discord.js Bot Development series on YouTube!",
-  "main": "app.js",
+  "main": "gambler.js",
   "scripts": {
     "start": "node .",
     "test": "eslint \"./**/*.js\"",
