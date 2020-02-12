@@ -1,84 +1,37 @@
-//First thing we need... discord.js! 
-const Discord = require("discord.js");
+const { Client, Collection } = require('discord.js');
+const fs = require('fs');
+require('dotenv-flow').config();
 
-//here i get the config and token file required for later use
-//const config = require("./config.json");
-//const token = require("./token.json");
-const bot = new Discord.Client();
-const fs = require("fs");
-bot.commands = new Discord.Collection();
-const mongoose = require("mongoose");
-mongoose.connect('mongodb://hazze:famousbot@famousdb-shard-00-00-gpgqa.mongodb.net:27017,famousdb-shard-00-01-gpgqa.mongodb.net:27017,famousdb-shard-00-02-gpgqa.mongodb.net:27017/test?ssl=true&replicaSet=FamousDB-shard-0&authSource=admin&retryWrites=true&w=majority/Coins', {
-  useNewUrlParser: true, 
-  useUnifiedTopology: true
+const client = new Client();
+
+require('./utils/functions')(client);
+
+client.commands = new Collection();
+
+client.mongoose = require('./utils/mongoose');
+client.config = require('./config');
+
+fs.readdir('./events/', (err, files) => {
+  if (err) return console.error;
+  files.forEach(file => {
+    if (!file.endsWith('.js')) return;
+    const evt = require(`./events/${file}`);
+    let evtName = file.split('.')[0];
+    console.log(`Loaded event '${evtName}'`);
+    client.on(evtName, evt.bind(null, client));
+  });
 });
-const Coins = require("./models/coins.js");
 
-fs.readdir("./commands/", (err, files) => {
-
-  if (err) console.log(err);
-
-  let jsfile = files.filter(f => f.split(".").pop() === "js");
-  if (jsfile.length <= 0) {
-    console.log("Couldn't find commands.");
-    return;
-  }
-
-  jsfile.forEach((f, i) => {
-    let props = require(`./commands/${f}`);
-    console.log(`${f} loaded!`);
-    bot.commands.set(props.help.name, props);
+fs.readdir('./commands/', async (err, files) => {
+    if (err) return console.error;
+    files.forEach(file => {
+      if (!file.endsWith('.js')) return;
+      let props = require(`./commands/${file}`);
+      let cmdName = file.split('.')[0];
+      console.log(`Loaded command '${cmdName}'`);
+      client.commands.set(cmdName, props);
+    });
   });
 
-});
-
-bot.on("ready", () => {
-  bot.user.setActivity("!help", {type: "PLAYING"})
-  console.log(bot.user.username + " is online.")
-});
-
-bot.on("message", async message => {
-  //a little bit of data parsing/general checks
-  if (message.author.bot) return;
-  
-  let content = message.content.split(" ");
-  let command = content[0];
-  let args = content.slice(1);
-  let prefix = "!";
-
-  if (command.startsWith(prefix)) {
-
-    let commandfile = bot.commands.get(command.slice(prefix.length));
-    if (commandfile) commandfile.run(bot, message, args);
-  } else {
-    if (message.channel.type === 'dm') return;
-    let chance = Math.floor(Math.random() * 100) + 1;
-    if (chance > 0) {
-      //here is where the coins are added.
-
-      let coinstoadd = Math.ceil(Math.random() * 10) + 5;
-
-      Coins.findOne({
-        userID: message.author.id,
-        serverID: message.guild.id
-      }, (err, res) => {
-        if(err) console.log(err);
-
-        if(!res){
-          const newDoc = new Coins({
-            userID: message.author.id,
-            username: message.author.username,
-            serverID: message.guild.id,
-            coins: coinstoadd
-          })
-          newDoc.save().catch(err => console.log(err));
-        }else{
-          res.coins = res.coins + coinstoadd;
-          res.save().catch(err => console.log(err))
-        }
-      })
-    }
-  }
-});
-
-bot.login(process.env.BOT_TOKEN);
+client.mongoose.init();
+client.login();
